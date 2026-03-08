@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block title %}InkWell — Home{% endblock %}
+
+{% block content %}
+
+<!-- ═══ HERO SECTION ═══ -->
+<section style="background: linear-gradient(135deg, #0d2b6e 0%, #1a4fad 55%, #2d6ef0 100%); color:#fff; padding: 5rem 0 4rem; position:relative; overflow:hidden;">
+  <!-- decorative circles -->
+  <div style="position:absolute; width:350px; height:350px; border-radius:50%; border:2px solid rgba(255,255,255,.07); top:-80px; right:-60px;"></div>
+  <div style="position:absolute; width:200px; height:200px; border-radius:50%; border:2px solid rgba(255,255,255,.07); bottom:20px; left:30px;"></div>
+
+  <div class="container text-center" style="position:relative;">
+    <span style="background:rgba(245,166,35,.2); color:#f5a623; border:1px solid rgba(245,166,35,.4); border-radius:20px; padding:4px 18px; font-size:.85rem; font-weight:700; letter-spacing:1px; text-transform:uppercase;">✦ Welcome to InkWell</span>
+    <h1 style="font-family:'Playfair Display',serif; font-size:3.2rem; font-weight:700; margin:1.2rem 0 1rem;">
+      Words That <span style="color:#f5a623;">Inspire,</span><br>Stories That Matter
+    </h1>
+    <p style="font-size:1.2rem; opacity:.85; max-width:600px; margin:0 auto 2rem;">
+      Discover articles, tutorials, and insights from writers who care.
+      Join our community and share your own voice.
+    </p>
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+      <a href="{{ url_for('blog') }}" class="btn btn-warning btn-lg fw-bold px-4" style="border-radius:25px;">
+        <i class="bi bi-journal-richtext me-2"></i>Browse Articles
+      </a>
+      {% if not current_user %}
+      <a href="{{ url_for('register') }}" class="btn btn-outline-light btn-lg px-4" style="border-radius:25px;">
+        <i class="bi bi-pencil me-2"></i>Start Writing
+      </a>
+      {% else %}
+      <a href="{{ url_for('new_post') }}" class="btn btn-outline-light btn-lg px-4" style="border-radius:25px;">
+        <i class="bi bi-pencil me-2"></i>Write a Post
+      </a>
+      {% endif %}
+    </div>
+
+    <!-- quick stats -->
+    <div class="row g-3 justify-content-center mt-5">
+      {% set stats = [('bi-journal-richtext','Articles','100+'),('bi-people','Authors','50+'),('bi-tags','Topics','20+')] %}
+      {% for icon, label, val in stats %}
+      <div class="col-auto">
+        <div style="background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); border-radius:12px; padding:.8rem 1.8rem; text-align:center; min-width:120px;">
+          <div style="font-size:1.4rem;"><i class="bi {{ icon }}"></i></div>
+          <div style="font-size:1.3rem; font-weight:700;">{{ val }}</div>
+          <div style="font-size:.8rem; opacity:.75;">{{ label }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ═══ RECENT POSTS + SIDEBAR ═══ -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+
+      <!-- Posts column -->
+      <div class="col-lg-8">
+        <h2 class="section-title">Latest Articles</h2>
+        {% if posts %}
+          <div class="row g-4">
+            {% for post in posts %}
+            <div class="col-md-6">
+              <div class="card post-card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <span>{{ post.created_at.strftime('%b %d, %Y') }}</span>
+                  <span class="category-badge">{{ post.category }}</span>
+                </div>
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title">{{ post.title }}</h5>
+                  <p class="text-muted flex-grow-1" style="font-size:.9rem;">
+                    {{ post.excerpt if post.excerpt else post.content[:120] }}…
+                  </p>
+                  <div class="d-flex justify-content-between align-items-center mt-2">
+                    <small class="text-muted"><i class="bi bi-person me-1"></i>{{ post.author.username }}</small>
+                    <a href="{{ url_for('post_detail', slug=post.slug) }}" class="read-more">
+                      Read more <i class="bi bi-arrow-right"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="text-center mt-4">
+            <a href="{{ url_for('blog') }}" class="btn btn-primary px-4">View All Articles <i class="bi bi-arrow-right ms-1"></i></a>
+          </div>
+        {% else %}
+          <div class="text-center py-5">
+            <i class="bi bi-journal-x" style="font-size:3rem; color:#aaa;"></i>
+            <p class="text-muted mt-2">No articles yet. Be the first to write one!</p>
+            <a href="{{ url_for('register') }}" class="btn btn-primary">Get Started</a>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+
+        <!-- Categories -->
+        {% if categories %}
+        <div class="sidebar-widget">
+          <h5><i class="bi bi-tags me-2"></i>Categories</h5>
+          {% for cat, count in categories %}
+          <a href="{{ url_for('blog', category=cat) }}" class="d-block text-decoration-none mb-1">
+            <div class="category-item">
+              <span>{{ cat }}</span>
+              <span class="category-count">{{ count }}</span>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Write CTA -->
+        <div class="sidebar-widget text-center" style="background:linear-gradient(135deg,#0d2b6e,#1a4fad); color:#fff;">
+          <i class="bi bi-pen" style="font-size:2.5rem; color:#f5a623;"></i>
+          <h5 class="mt-2" style="color:#fff;">Got something to say?</h5>
+          <p style="font-size:.88rem; opacity:.85;">Join InkWell and start publishing your ideas today — it's free.</p>
+          {% if current_user %}
+            <a href="{{ url_for('new_post') }}" class="btn btn-warning fw-bold w-100" style="border-radius:20px;">Write a Post</a>
+          {% else %}
+            <a href="{{ url_for('register') }}" class="btn btn-warning fw-bold w-100" style="border-radius:20px;">Join Now</a>
+          {% endif %}
+        </div>
+
+        <!-- Tips -->
+        <div class="sidebar-widget">
+          <h5><i class="bi bi-lightbulb me-2"></i>Writing Tips</h5>
+          <ul class="list-unstyled mb-0" style="font-size:.88rem;">
+            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Use clear, simple language</li>
+            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Add helpful images</li>
+            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Break content into sections</li>
+            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Edit before publishing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section class="py-5" style="background:#fff; border-top:1px solid #dde3f0;">
+  <div class="container text-center">
+    <h2 class="section-title mx-auto">How InkWell Works</h2>
+    <div class="row g-4 mt-2">
+      {% set steps = [
+        ('1','bi-person-plus-fill','#1a4fad','Sign Up','Create a free account in seconds. No credit card needed.'),
+        ('2','bi-pencil-square','#14a676','Write','Use our simple editor to write and format your articles.'),
+        ('3','bi-globe2','#f5a623','Publish','Hit publish and share your work with the whole world.'),
+      ] %}
+      {% for num, icon, color, title, desc in steps %}
+      <div class="col-md-4">
+        <div style="width:64px; height:64px; border-radius:50%; background:{{ color }}; color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.6rem; margin:0 auto 1rem;">
+          <i class="bi {{ icon }}"></i>
+        </div>
+        <h5 style="font-family:'Playfair Display',serif;">{{ num }}. {{ title }}</h5>
+        <p class="text-muted" style="font-size:.92rem;">{{ desc }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block title %}Register — InkWell{% endblock %}
+
+{% block content %}
+<section class="py-5" style="min-height:80vh; display:flex; align-items:center;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+
+        <!-- Decorative top -->
+        <div class="text-center mb-4">
+          <div style="width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg,#0d2b6e,#2d6ef0); color:#fff; font-size:1.8rem; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+            <i class="bi bi-person-plus"></i>
+          </div>
+          <h2 style="font-family:'Playfair Display',serif; color:#0d2b6e;">Create Your Account</h2>
+          <p class="text-muted">Join InkWell and start sharing your stories</p>
+        </div>
+
+        <div class="card" style="border-radius:16px; padding:2rem;">
+          <form method="POST" id="registerForm" novalidate>
+
+            <div class="mb-3">
+              <label for="username">Username</label>
+              <div class="input-group mt-1">
+                <span class="input-group-text" style="background:#e8f0fe;"><i class="bi bi-person" style="color:#1a4fad;"></i></span>
+                <input type="text" class="form-control" id="username" name="username" placeholder="your_username" required minlength="3"
+                       value="{{ request.form.get('username','') }}" />
+              </div>
+              <div class="invalid-feedback d-none" id="username-err">Username must be at least 3 characters.</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="email">Email Address</label>
+              <div class="input-group mt-1">
+                <span class="input-group-text" style="background:#e8f0fe;"><i class="bi bi-envelope" style="color:#1a4fad;"></i></span>
+                <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required
+                       value="{{ request.form.get('email','') }}" />
+              </div>
+              <div class="invalid-feedback d-none" id="email-err">Please enter a valid email.</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="password">Password</label>
+              <div class="input-group mt-1">
+                <span class="input-group-text" style="background:#e8f0fe;"><i class="bi bi-lock" style="color:#1a4fad;"></i></span>
+                <input type="password" class="form-control" id="password" name="password" placeholder="At least 6 characters" required minlength="6" />
+                <button class="btn btn-outline-secondary" type="button" id="togglePw">
+                  <i class="bi bi-eye" id="eyeIcon"></i>
+                </button>
+              </div>
+              <div class="invalid-feedback d-none" id="pw-err">Password must be at least 6 characters.</div>
+            </div>
+
+            <div class="mb-4">
+              <label for="password2">Confirm Password</label>
+              <div class="input-group mt-1">
+                <span class="input-group-text" style="background:#e8f0fe;"><i class="bi bi-lock-fill" style="color:#1a4fad;"></i></span>
+                <input type="password" class="form-control" id="password2" name="password2" placeholder="Repeat password" required />
+              </div>
+              <div class="invalid-feedback d-none" id="pw2-err">Passwords do not match.</div>
+            </div>
+
+            <!-- Strength bar -->
+            <div class="mb-3">
+              <div style="height:6px; background:#eee; border-radius:3px;">
+                <div id="strengthBar" style="height:100%; width:0; border-radius:3px; transition:all .3s;"></div>
+              </div>
+              <small id="strengthLabel" class="text-muted" style="font-size:.78rem;"></small>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold" style="font-size:1rem;">
+              <i class="bi bi-person-check me-2"></i>Create Account
+            </button>
+          </form>
+
+          <p class="text-center mt-3 mb-0" style="font-size:.9rem;">
+            Already have an account? <a href="{{ url_for('login') }}" style="font-weight:700;">Log in</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // ── Toggle password visibility
+  document.getElementById('togglePw').addEventListener('click', function() {
+    const pw = document.getElementById('password');
+    const icon = document.getElementById('eyeIcon');
+    if (pw.type === 'password') {
+      pw.type = 'text';
+      icon.className = 'bi bi-eye-slash';
+    } else {
+      pw.type = 'password';
+      icon.className = 'bi bi-eye';
+    }
+  });
+
+  // ── Password strength indicator
+  document.getElementById('password').addEventListener('input', function() {
+    const val = this.value;
+    const bar = document.getElementById('strengthBar');
+    const lbl = document.getElementById('strengthLabel');
+    let strength = 0;
+    if (val.length >= 6) strength++;
+    if (val.length >= 10) strength++;
+    if (/[A-Z]/.test(val)) strength++;
+    if (/[0-9]/.test(val)) strength++;
+    if (/[^A-Za-z0-9]/.test(val)) strength++;
+    const colors = ['','#e74c3c','#f5a623','#f5a623','#14a676','#14a676'];
+    const labels = ['','Very Weak','Weak','Moderate','Strong','Very Strong'];
+    const widths = ['0%','20%','40%','60%','80%','100%'];
+    bar.style.width = widths[strength] || '0%';
+    bar.style.background = colors[strength] || 'transparent';
+    lbl.textContent = strength > 0 ? labels[strength] : '';
+  });
+
+  // ── Client-side form validation before submit
+  document.getElementById('registerForm').addEventListener('submit', function(e) {
+    let valid = true;
+
+    const username = document.getElementById('username');
+    const email    = document.getElementById('email');
+    const pw       = document.getElementById('password');
+    const pw2      = document.getElementById('password2');
+
+    // Hide all errors first
+    document.querySelectorAll('.invalid-feedback').forEach(el => el.classList.add('d-none'));
+
+    if (username.value.trim().length < 3) {
+      document.getElementById('username-err').classList.remove('d-none');
+      valid = false;
+    }
+    if (!email.value.includes('@') || !email.value.includes('.')) {
+      document.getElementById('email-err').classList.remove('d-none');
+      valid = false;
+    }
+    if (pw.value.length < 6) {
+      document.getElementById('pw-err').classList.remove('d-none');
+      valid = false;
+    }
+    if (pw.value !== pw2.value) {
+      document.getElementById('pw2-err').classList.remove('d-none');
+      valid = false;
+    }
+
+    if (!valid) e.preventDefault();
+  });
+</script>
+{% endblock %}

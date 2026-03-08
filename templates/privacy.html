@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy — InkWell{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <div class="container">
+    <h1><i class="bi bi-shield-check me-3"></i>Privacy Policy</h1>
+    <p>Last updated: January 1, 2025</p>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card" style="border-radius:16px;">
+          <div class="card-body p-4 p-md-5">
+
+            <p style="color:#6b7280; font-size:.95rem;">
+              At InkWell, your privacy is important to us. This policy explains what information we collect,
+              how we use it, and what rights you have.
+            </p>
+
+            {% set sections = [
+              ('1. Information We Collect','We collect the information you provide when you register — your username, email address, and password (stored as a secure hash, never in plain text). We also store the articles, skills, and technologies you add to your profile.'),
+              ('2. How We Use Your Information','Your information is used solely to operate the InkWell platform — to authenticate you, display your content publicly, and provide you with a personalised dashboard. We do not sell, rent, or share your personal data with third parties.'),
+              ('3. Passwords & Security','All passwords are hashed using industry-standard cryptography (Werkzeug\'s PBKDF2). Even the site administrators cannot see your password. Please choose a strong, unique password and keep it safe.'),
+              ('4. Cookies','We use session cookies to keep you logged in between page visits. These cookies expire when you close your browser or log out. We do not use advertising or tracking cookies.'),
+              ('5. Your Content','Articles you publish are visible to the public. You may delete your posts at any time from your dashboard. Deleting your account removes all associated content from the database.'),
+              ('6. Children\'s Privacy','InkWell is not directed at children under the age of 13. We do not knowingly collect personal information from children.'),
+              ('7. Changes to This Policy','We may update this policy from time to time. Significant changes will be announced on the platform. Continued use after changes constitutes acceptance of the updated policy.'),
+              ('8. Contact','If you have questions about this privacy policy, please use our Contact page to get in touch.'),
+            ] %}
+
+            {% for title, body in sections %}
+            <h4 style="font-family:'Playfair Display',serif; color:#0d2b6e; margin-top:2rem;">{{ title }}</h4>
+            <p style="line-height:1.8; color:#444;">{{ body }}</p>
+            {% endfor %}
+
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <a href="{{ url_for('home') }}" class="btn btn-outline-primary">← Back to Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

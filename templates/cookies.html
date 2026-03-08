@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Cookie Policy — InkWell{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <div class="container">
+    <h1><i class="bi bi-cookie me-3"></i>Cookie Policy</h1>
+    <p>Last updated: January 1, 2025</p>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card" style="border-radius:16px;">
+          <div class="card-body p-4 p-md-5">
+
+            <p style="color:#6b7280;">
+              This page explains how InkWell uses cookies and similar technologies.
+            </p>
+
+            <h4 style="font-family:'Playfair Display',serif; color:#0d2b6e; margin-top:2rem;">What Are Cookies?</h4>
+            <p style="line-height:1.8; color:#444;">
+              Cookies are small text files stored in your browser when you visit a website. They help the
+              website remember information about your visit, making it more useful on your next visit.
+            </p>
+
+            <h4 style="font-family:'Playfair Display',serif; color:#0d2b6e; margin-top:2rem;">Cookies We Use</h4>
+
+            <!-- Cookie table -->
+            <div class="table-responsive mt-3">
+              <table class="table table-bordered" style="font-size:.9rem;">
+                <thead style="background:#e8f0fe; color:#0d2b6e;">
+                  <tr>
+                    <th>Cookie Name</th>
+                    <th>Purpose</th>
+                    <th>Duration</th>
+                    <th>Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>session</code></td>
+                    <td>Keeps you logged in and stores flash messages between page loads.</td>
+                    <td>Until browser close or logout</td>
+                    <td><span class="badge bg-success">Essential</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h4 style="font-family:'Playfair Display',serif; color:#0d2b6e; margin-top:2rem;">Cookies We Do NOT Use</h4>
+            <ul style="line-height:2; color:#444;">
+              <li>Advertising or marketing cookies</li>
+              <li>Analytics tracking cookies (e.g. Google Analytics)</li>
+              <li>Social media tracking pixels</li>
+              <li>Third-party profiling cookies</li>
+            </ul>
+
+            <h4 style="font-family:'Playfair Display',serif; color:#0d2b6e; margin-top:2rem;">Managing Cookies</h4>
+            <p style="line-height:1.8; color:#444;">
+              You can control cookies through your browser settings. Note that disabling the session cookie
+              will prevent you from logging in. Most browsers allow you to view, delete, and block cookies
+              from specific websites via the Settings → Privacy menu.
+            </p>
+
+            <h4 style="font-family:'Playfair Display',serif; color:#0d2b6e; margin-top:2rem;">Contact</h4>
+            <p style="line-height:1.8; color:#444;">
+              Questions? <a href="{{ url_for('contact') }}">Get in touch with us</a>.
+            </p>
+
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <a href="{{ url_for('home') }}" class="btn btn-outline-primary">← Back to Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

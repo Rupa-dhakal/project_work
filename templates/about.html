@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}About — InkWell{% endblock %}
+
+{% block content %}
+
+<div class="page-hero">
+  <div class="container">
+    <h1><i class="bi bi-info-circle me-3"></i>About InkWell</h1>
+    <p>Our story, mission, and the people behind the platform.</p>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row g-5 align-items-center mb-5">
+      <div class="col-lg-6">
+        <h2 class="section-title">What is InkWell?</h2>
+        <p style="font-size:1.05rem; line-height:1.8; color:#444;">
+          InkWell is a community-driven blog platform where writers, thinkers, and creators
+          share their knowledge with the world. Whether you're a seasoned developer writing
+          tutorials or a first-time blogger sharing personal experiences, InkWell gives you
+          a clean, fast, and friendly space to publish.
+        </p>
+        <p style="font-size:1.05rem; line-height:1.8; color:#444;">
+          We built InkWell as a college project to demonstrate how modern web technologies
+          — Flask, SQLAlchemy, and Bootstrap — can work together to create a real-world
+          publishing platform.
+        </p>
+        <a href="{{ url_for('register') }}" class="btn btn-primary px-4 mt-2">
+          <i class="bi bi-person-plus me-2"></i>Join Our Community
+        </a>
+      </div>
+      <div class="col-lg-6">
+        <div style="background:linear-gradient(135deg,#0d2b6e,#1a4fad,#2d6ef0); border-radius:20px; padding:3rem; color:#fff; text-align:center;">
+          <i class="bi bi-pen" style="font-size:4rem; color:#f5a623;"></i>
+          <h3 style="font-family:'Playfair Display',serif; margin-top:1rem;">Our Mission</h3>
+          <p style="opacity:.9; line-height:1.7;">
+            To give every person a voice. Writing is thinking, and thinking is how the world improves.
+            We want to lower the barrier to publishing so anyone with an idea can share it.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Values -->
+    <div class="text-center mb-4">
+      <h2 class="section-title mx-auto">Our Core Values</h2>
+    </div>
+    <div class="row g-4 mb-5">
+      {% set values = [
+        ('bi-people-fill','#1a4fad','Community First','We put our writers and readers at the heart of every decision we make.'),
+        ('bi-unlock-fill','#14a676','Open & Free','Creating an account and publishing articles is always 100% free.'),
+        ('bi-shield-check','#7c2d92','Privacy Matters','We never sell your data. Your content belongs to you.'),
+        ('bi-lightning-charge-fill','#f5a623','Fast & Simple','No clutter, no complexity — just you and your words.'),
+      ] %}
+      {% for icon, color, title, desc in values %}
+      <div class="col-md-3 col-6 text-center">
+        <div style="width:60px; height:60px; border-radius:50%; background:{{ color }}20; color:{{ color }}; font-size:1.5rem; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+          <i class="bi {{ icon }}"></i>
+        </div>
+        <h6 style="font-family:'Playfair Display',serif;">{{ title }}</h6>
+        <p style="font-size:.85rem; color:#6b7280;">{{ desc }}</p>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Tech Stack -->
+    <div class="card" style="border-radius:16px;">
+      <div class="card-body p-5">
+        <h3 class="section-title">Built With</h3>
+        <div class="row g-3">
+          {% set stack = [
+            ('Flask','Python web framework','#2d6ef0'),
+            ('SQLAlchemy','Database ORM','#14a676'),
+            ('Bootstrap 5','Responsive CSS','#7c2d92'),
+            ('SQLite','Local database','#f5a623'),
+            ('Werkzeug','Password security','#e74c3c'),
+            ('Jinja2','HTML templating','#0d7753'),
+          ] %}
+          {% for name, desc, color in stack %}
+          <div class="col-md-4">
+            <div style="display:flex; align-items:center; gap:12px; padding:.8rem; border-radius:10px; background:#f8f9fa;">
+              <div style="width:40px; height:40px; border-radius:8px; background:{{ color }}20; color:{{ color }}; display:flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:700;">
+                {{ name[0] }}
+              </div>
+              <div>
+                <div style="font-weight:700; font-size:.92rem; color:#0d2b6e;">{{ name }}</div>
+                <div style="font-size:.8rem; color:#6b7280;">{{ desc }}</div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

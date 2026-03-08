@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}Contact — InkWell{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <div class="container">
+    <h1><i class="bi bi-envelope me-3"></i>Contact Us</h1>
+    <p>Have a question, suggestion, or just want to say hello? We'd love to hear from you.</p>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row g-5">
+
+      <!-- Form -->
+      <div class="col-lg-7">
+        <div class="card" style="border-radius:16px;">
+          <div class="card-body p-4 p-md-5">
+            <h3 style="font-family:'Playfair Display',serif; color:#0d2b6e;" class="mb-4">Send a Message</h3>
+            <form method="POST" id="contactForm" novalidate>
+
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label for="name">Your Name <span style="color:red;">*</span></label>
+                  <input type="text" class="form-control mt-1" id="name" name="name"
+                         value="{{ request.form.get('name','') }}" placeholder="Jane Smith" required />
+                  <div class="invalid-feedback d-none" id="name-err">Name is required.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="email">Email Address <span style="color:red;">*</span></label>
+                  <input type="email" class="form-control mt-1" id="email" name="email"
+                         value="{{ request.form.get('email','') }}" placeholder="jane@example.com" required />
+                  <div class="invalid-feedback d-none" id="email-err">Valid email required.</div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="subject">Subject</label>
+                <input type="text" class="form-control mt-1" id="subject" name="subject"
+                       value="{{ request.form.get('subject','') }}" placeholder="What's this about?" />
+              </div>
+
+              <div class="mb-4">
+                <label for="message">Message <span style="color:red;">*</span></label>
+                <textarea class="form-control mt-1" id="message" name="message" rows="6"
+                          placeholder="Write your message here…" required>{{ request.form.get('message','') }}</textarea>
+                <div class="invalid-feedback d-none" id="msg-err">Message cannot be empty.</div>
+              </div>
+
+              <button type="submit" class="btn btn-primary fw-bold px-4 py-2" style="font-size:1rem;">
+                <i class="bi bi-send me-2"></i>Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="col-lg-5">
+        <h3 style="font-family:'Playfair Display',serif; color:#0d2b6e;" class="mb-4">Other Ways to Reach Us</h3>
+
+        {% set infos = [
+          ('bi-envelope-fill','#1a4fad','Email','hello@inkwell.example.com'),
+          ('bi-geo-alt-fill','#14a676','Location','Kathmandu, Nepal'),
+          ('bi-clock-fill','#f5a623','Response Time','Within 24 hours'),
+        ] %}
+        {% for icon, color, label, val in infos %}
+        <div class="d-flex align-items-center gap-3 mb-4">
+          <div style="width:52px; height:52px; border-radius:12px; background:{{ color }}20; color:{{ color }}; font-size:1.4rem; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <i class="bi {{ icon }}"></i>
+          </div>
+          <div>
+            <div style="font-weight:700; color:#0d2b6e;">{{ label }}</div>
+            <div style="color:#6b7280; font-size:.9rem;">{{ val }}</div>
+          </div>
+        </div>
+        {% endfor %}
+
+        <div class="card mt-4" style="border-radius:12px; background:linear-gradient(135deg,#0d2b6e,#1a4fad); color:#fff;">
+          <div class="card-body p-4 text-center">
+            <i class="bi bi-github" style="font-size:2.5rem;"></i>
+            <h5 class="mt-2" style="font-family:'Playfair Display',serif;">Open Source</h5>
+            <p style="font-size:.88rem; opacity:.85;">This project is open source and available on GitHub for educational use.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    let valid = true;
+    document.querySelectorAll('.invalid-feedback').forEach(el => el.classList.add('d-none'));
+
+    if (!document.getElementById('name').value.trim()) {
+      document.getElementById('name-err').classList.remove('d-none'); valid = false;
+    }
+    const em = document.getElementById('email').value;
+    if (!em.includes('@') || !em.includes('.')) {
+      document.getElementById('email-err').classList.remove('d-none'); valid = false;
+    }
+    if (!document.getElementById('message').value.trim()) {
+      document.getElementById('msg-err').classList.remove('d-none'); valid = false;
+    }
+    if (!valid) e.preventDefault();
+  });
+</script>
+{% endblock %}

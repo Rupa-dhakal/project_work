@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile — InkWell{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <div class="container">
+    <h1><i class="bi bi-person-gear me-3"></i>Edit Profile</h1>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card" style="border-radius:16px;">
+          <div class="card-body p-4">
+            <form method="POST">
+
+              <div class="mb-3">
+                <label for="full_name">Full Name</label>
+                <input type="text" class="form-control mt-1" id="full_name" name="full_name"
+                       value="{{ current_user.full_name }}" placeholder="Your real name" />
+              </div>
+
+              <div class="mb-3">
+                <label for="email">Email Address</label>
+                <input type="email" class="form-control mt-1" id="email" name="email"
+                       value="{{ current_user.email }}" required />
+              </div>
+
+              <div class="mb-4">
+                <label for="bio">Bio</label>
+                <textarea class="form-control mt-1" id="bio" name="bio" rows="4"
+                          placeholder="Tell readers a little about yourself…">{{ current_user.bio }}</textarea>
+              </div>
+
+              <div class="d-flex gap-3">
+                <button type="submit" class="btn btn-primary fw-bold px-4">
+                  <i class="bi bi-check-circle me-2"></i>Save Changes
+                </button>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary px-4">Cancel</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

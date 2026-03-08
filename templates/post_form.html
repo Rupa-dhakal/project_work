@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit Post' if post else 'New Post' }} — InkWell{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+  <div class="container">
+    <h1><i class="bi bi-{{ 'pencil-square' if post else 'plus-circle' }} me-3"></i>{{ 'Edit Article' if post else 'Write New Article' }}</h1>
+    <p>{{ 'Update your article below.' if post else 'Share your ideas, tutorials, or stories with the world.' }}</p>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card" style="border-radius:16px;">
+          <div class="card-body p-4 p-md-5">
+            <form method="POST" id="postForm" novalidate>
+
+              <!-- Title -->
+              <div class="mb-4">
+                <label for="title">Article Title <span style="color:red;">*</span></label>
+                <input type="text" class="form-control form-control-lg mt-1" id="title" name="title"
+                       placeholder="Write a compelling title…"
+                       value="{{ post.title if post else request.form.get('title','') }}" required />
+                <div class="invalid-feedback d-none" id="title-err">Please enter a title.</div>
+              </div>
+
+              <!-- Excerpt -->
+              <div class="mb-4">
+                <label for="excerpt">Short Excerpt / Preview</label>
+                <input type="text" class="form-control mt-1" id="excerpt" name="excerpt"
+                       placeholder="A one-sentence preview shown in the blog listing…"
+                       value="{{ post.excerpt if post else request.form.get('excerpt','') }}" />
+                <small class="text-muted">Keep it under 150 characters for best results.</small>
+              </div>
+
+              <!-- Category + Tags row -->
+              <div class="row g-3 mb-4">
+                <div class="col-md-5">
+                  <label for="category">Category</label>
+                  <select class="form-select mt-1" id="category" name="category">
+                    {% set cats = ['General','Technology','Tutorial','Opinion','News','Health','Travel','Science','Design','Other'] %}
+                    {% for cat in cats %}
+                    <option value="{{ cat }}" {% if post and post.category == cat %}selected{% elif request.form.get('category') == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-7">
+                  <label for="tags">Tags <span class="text-muted fw-normal">(comma-separated)</span></label>
+                  <input type="text" class="form-control mt-1" id="tags" name="tags"
+                         placeholder="python, flask, tutorial"
+                         value="{{ post.tags if post else request.form.get('tags','') }}" />
+                </div>
+              </div>
+
+              <!-- Content -->
+              <div class="mb-4">
+                <label for="content">Article Content <span style="color:red;">*</span></label>
+                <textarea class="form-control mt-1" id="content" name="content" rows="14"
+                          placeholder="Write your article here…" required style="font-size:.95rem; line-height:1.7;">{{ post.content if post else request.form.get('content','') }}</textarea>
+                <div class="invalid-feedback d-none" id="content-err">Content cannot be empty.</div>
+                <div class="d-flex justify-content-between mt-1">
+                  <small class="text-muted">Tip: use blank lines to separate paragraphs.</small>
+                  <small id="wordCount" class="text-muted">0 words</small>
+                </div>
+              </div>
+
+              <!-- Publish toggle -->
+              <div class="mb-4 d-flex align-items-center gap-3 p-3 rounded-3" style="background:#f0f5ff;">
+                <div class="form-check form-switch mb-0">
+                  <input class="form-check-input" type="checkbox" id="is_published" name="is_published"
+                         {% if post is none or post.is_published %}checked{% endif %}
+                         style="width:48px; height:24px;" />
+                  <label class="form-check-label fw-bold ms-2" for="is_published">Publish immediately</label>
+                </div>
+                <small class="text-muted">Uncheck to save as draft.</small>
+              </div>
+
+              <!-- Buttons -->
+              <div class="d-flex gap-3">
+                <button type="submit" class="btn btn-primary px-4 fw-bold">
+                  <i class="bi bi-{{ 'check-circle' if post else 'send' }} me-2"></i>{{ 'Update Article' if post else 'Publish Article' }}
+                </button>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary px-4">Cancel</a>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Live word count
+  const contentArea = document.getElementById('content');
+  const wordCountEl = document.getElementById('wordCount');
+
+  function updateWordCount() {
+    const words = contentArea.value.trim().split(/\s+/).filter(w => w).length;
+    wordCountEl.textContent = words + ' word' + (words !== 1 ? 's' : '');
+  }
+  contentArea.addEventListener('input', updateWordCount);
+  updateWordCount(); // run on load for edit form
+
+  // Client-side validation
+  document.getElementById('postForm').addEventListener('submit', function(e) {
+    let valid = true;
+    document.querySelectorAll('.invalid-feedback').forEach(el => el.classList.add('d-none'));
+
+    if (!document.getElementById('title').value.trim()) {
+      document.getElementById('title-err').classList.remove('d-none');
+      valid = false;
+    }
+    if (!contentArea.value.trim()) {
+      document.getElementById('content-err').classList.remove('d-none');
+      valid = false;
+    }
+    if (!valid) e.preventDefault();
+  });
+</script>
+{% endblock %}
